@@ -1,5 +1,5 @@
 import common from './components/common';
+import passport from './components/passport';
 import security from './components/security';
-import server from './components/server';
 
-module.exports = Object.assign({}, common, security, server);
+module.exports = Object.assign({}, common, passport, security);

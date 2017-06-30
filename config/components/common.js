@@ -1,7 +1,7 @@
 import joi from 'joi';
 
 const envVarsSchema = joi.object({
-  NODE_ENV: joi.string();
+  NODE_ENV: joi.string()
   .allow(['development', 'production', 'test', 'provision'])
   .required()
 }).unknown().required();
