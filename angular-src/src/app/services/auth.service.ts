@@ -51,7 +51,6 @@ export class AuthService {
 
   logout() {
     this.authToken = null;
-    this.authToken = null;
     localStorage.clear();
   }
 

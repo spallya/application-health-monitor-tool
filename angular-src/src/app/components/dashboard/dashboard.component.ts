@@ -8,33 +8,52 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardComponent implements OnInit {
 
   imgSrc: String;
-  config = Config;
+  serverDetails: ServerDetailsInterface[];
 
   constructor() { }
 
   ngOnInit() {
   this.imgSrc = "/assets/check.png";
+  this.serverDetails = ServerDetails;
   }
 
-  toggleImage(i){
-    this.config[i].isActive = !this.config[i].isActive;
+  checkStatusOfThis(i){
+    this.serverDetails[i].isRunning = !this.serverDetails[i].isRunning;
+  }
+
+  checkStatusOfAll() {
+    // for()
   }
 }
 
-let Config = [
+interface ServerDetailsInterface {
+  server: String;
+  description: String;
+  url: String;
+  isActive: boolean;
+  isRunning: boolean;
+}
+
+let ServerDetails = [
   {
-    company: "Google",
-    subtext: "Google Server",
-    isActive: true
+    server: "Google",
+    description: "Google Server",
+    url: "https://www.google.com",
+    isActive: true,
+    isRunning: true
   },
   {
-    company: "Facebook",
-    subtext: "Facebook Server",
-    isActive: false
+    server: "Facebook",
+    description: "Facebook Server",
+    url: "https://www.facebook.com",
+    isActive: true,
+    isRunning: false
   },
   {
-    company: "GitHub",
-    subtext: "GitHub Server",
-    isActive: false
+    server: "GitHub",
+    description: "GitHub Server",
+    url: "https://www.github.com",
+    isActive: true,
+    isRunning: true
 }
 ];
