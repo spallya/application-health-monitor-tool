@@ -4,31 +4,34 @@ const jwt = require(`jsonwebtoken`);
 import {
   security as securityObject
 } from '../../config';
-const UserIndex = require(`../models/user`);
+import { User as UserModel } from '../models';
 
 // Register
 router.post(`/register`, (req, res, next) => {
-    let newUser = new UserIndex.UserSchema({
-        name:  req.body.name,
+  console.log(req.body);
+    let newUser = new UserModel({
+        firstName:  req.body.firstName,
+        lastName:  req.body.lastName,
         email: req.body.email,
-        username: req.body.username,
-        password: req.body.password
+        password: req.body.password,
+        organization: req.body.organization
     });
-    UserIndex.helpers.addUser(newUser).then((response)=>{
+    UserModel.addUser(newUser).then((response)=>{
       res.json(response);
     });
 });
 
 // Authenticate
 router.post(`/authenticate`, (req, res, next) => {
-    let username = req.body.username;
+  console.log(req.body);
+    let email = req.body.email;
     let password = req.body.password;
-    UserIndex.helpers.getUserByUsername(username, (err, user) => {
+    UserModel.getUserByEmail(email, (err, user) => {
         if(err) throw err;
         if(!user) {
             return res.json({success: false, msg: `User not found`});
         } else {
-            UserIndex.helpers.comparePassword(password, user.password, (err, isMatch) => {
+            UserModel.comparePassword(password, user.password, (err, isMatch) => {
                 if(err) throw err;
                 if(isMatch) {
                     const token = jwt.sign(user, securityObject.keys.jwt, {
@@ -39,8 +42,8 @@ router.post(`/authenticate`, (req, res, next) => {
                         token: 'JWT ' + token,
                         user: {
                             id: user._id,
-                            name: user.name,
-                            username: user.username,
+                            firstName: user.firstName,
+                            lastName: user.lastName,
                             email: user.email
                         }
                     });

@@ -11,10 +11,11 @@ import { Router } from "@angular/router";
 })
 export class RegisterComponent implements OnInit {
 
-  name: String;
+  firstName: String;
+  lastName: String;
   email: String;
-  username: String;
   password: String;
+  organization: String;
 
   constructor(
     private validateService: ValidateService,
@@ -28,31 +29,32 @@ export class RegisterComponent implements OnInit {
 
   onRegisterSubmit() {
     const user = {
-      name: this.name,
+      firstName: this.firstName,
+      lastName: this.lastName,
       email: this.email,
-      username: this.username,
-      password: this.password
+      password: this.password,
+      organization: this.organization
     }
+    console.log('Submit occured')
+    // if(!this.validateService.validateRegister(user)) {
+    //   // this.flashMessage.show('Please fill in all the fields', {cssClass: 'alert-danger', timeout: 3000});
+    //   return false;
+    // }
+    //
+    // if(!this.validateService.validateEmail(user.email)) {
+    //   // this.flashMessage.show('Please provide a valid email', {cssClass: 'alert-danger', timeout: 3000});
+    //   return false;
+    // }
 
-    // Required Fields
-    if(!this.validateService.validateRegister(user)) {
-      this.flashMessage.show('Please fill in all the fields', {cssClass: 'alert-danger', timeout: 3000});
-      return false;
-    }
-
-    // Check Email is Valid
-    if(!this.validateService.validateEmail(user.email)) {
-      this.flashMessage.show('Please provide a valid email', {cssClass: 'alert-danger', timeout: 3000});
-      return false;
-    }
-
-    //Register User
     this.authService.registerUser(user).subscribe(data => {
+      console.log(data)
       if(data.success) {
-        this.flashMessage.show('Registered Successfully. Please login', {cssClass: 'alert-success', timeout: 3000});
+        // this.flashMessage.show('Registered Successfully. Please login', {cssClass: 'alert-success', timeout: 3000});
+        console.log('Success register')
         this.router.navigate(['/login']);
       } else {
-        this.flashMessage.show('Something went wrong', {cssClass: 'alert-danger', timeout: 3000});
+        // this.flashMessage.show('Something went wrong', {cssClass: 'alert-danger', timeout: 3000});
+        console.log('Fail register')
         this.router.navigate(['/register']);
       }
     });

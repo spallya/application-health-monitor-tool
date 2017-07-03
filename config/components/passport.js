@@ -1,6 +1,6 @@
 const JwtStrategy = require(`passport-jwt`).Strategy;
 const ExtractJwt = require(`passport-jwt`).ExtractJwt;
-const UserIndex = require(`../../web/models/user`);
+import { User as UserModel } from '../../web/models';
 import securityObject from './security';
 
 module.exports = function(passport) {
@@ -8,7 +8,7 @@ module.exports = function(passport) {
     opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
     opts.secretOrKey = securityObject.security.keys.jwt;
     passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
-        UserIndex.helpers.getUserById(jwt_payload._doc._id, (err, user) => {
+        UserModel.getUserById(jwt_payload._doc._id, (err, user) => {
             if(err) {
                 return done(err, false);
             }

@@ -10,7 +10,7 @@ import { ValidateService } from "../../services/validate.service";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  username: String;
+  email: String;
   password: String;
 
   constructor(
@@ -25,13 +25,13 @@ export class LoginComponent implements OnInit {
 
   onLoginSubmit() {
     const user = {
-      username: this.username,
+      email: this.email,
       password: this.password
     }
-    if(!this.validateService.validateLogin(user)) {
-      // this.flashMessage.show('Please fill in all the fields', {cssClass: 'alert-danger', timeout: 3000});
-      return false;
-    }
+    // if(!this.validateService.validateLogin(user)) {
+    //   // this.flashMessage.show('Please fill in all the fields', {cssClass: 'alert-danger', timeout: 3000});
+    //   return false;
+    // }
     this.authService.authenticateUser(user).subscribe(data => {
       if(data.success) {
         this.authService.storeUserData(data.token, data.user);
