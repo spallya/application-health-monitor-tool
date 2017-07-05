@@ -7,7 +7,12 @@ body {
   padding-top: 50px;
 }
 
-
+.abc {
+  background-color: white;
+  position: fixed;
+  width: 100%;
+  color: white;
+}
 /*
  * Global add-ons
  */
