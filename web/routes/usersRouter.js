@@ -8,7 +8,6 @@ import { User as UserModel } from '../models';
 
 // Register
 router.post(`/register`, (req, res, next) => {
-  console.log(req.body);
     let newUser = new UserModel({
         firstName:  req.body.firstName,
         lastName:  req.body.lastName,
@@ -23,7 +22,6 @@ router.post(`/register`, (req, res, next) => {
 
 // Authenticate
 router.post(`/authenticate`, (req, res, next) => {
-  console.log(req.body);
     let email = req.body.email;
     let password = req.body.password;
     UserModel.getUserByEmail(email, (err, user) => {

@@ -3,7 +3,14 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from "@angular/router";
-// import { MdInputModule } from '@angular/material';
+import { MdInputModule } from '@angular/material';
+import { MdButtonModule, MdCheckboxModule } from '@angular/material';
+import { MdCardModule } from '@angular/material';
+import { MdIconModule } from '@angular/material';
+import { MdIconRegistry } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -18,11 +25,12 @@ import { AuthService } from "./services/auth.service";
 
 import { AuthGuard } from "./guard/auth.guard";
 
-import { FlashMessagesModule } from "angular2-flash-messages";
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { ServerComponent } from './components/server/server.component';
 
 const appRoutes: Routes = [
   {path:'', component: HomeComponent},
+  {path:'servers', component: ServerComponent},
   {path:'register', component: RegisterComponent},
   {path:'login', component: LoginComponent},
   {path:'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
@@ -39,19 +47,28 @@ const appRoutes: Routes = [
     HomeComponent,
     DashboardComponent,
     ProfileComponent,
-    SidebarComponent
+    SidebarComponent,
+    ServerComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes, {useHash: true}),
-    FlashMessagesModule
+    MdInputModule,
+    BrowserAnimationsModule,
+    NoopAnimationsModule,
+    MdButtonModule,
+    MdCheckboxModule,
+    MdCardModule,
+    MdIconModule,
+    MaterialModule
   ],
   providers: [
     ValidateService,
     AuthService,
-    AuthGuard
+    AuthGuard,
+    MdIconRegistry
   ],
   bootstrap: [AppComponent]
 })
