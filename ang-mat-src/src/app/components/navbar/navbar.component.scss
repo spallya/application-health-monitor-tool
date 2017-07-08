@@ -7,11 +7,22 @@ body {
   padding-top: 50px;
 }
 
-.abc {
-  background-color: white;
-  position: fixed;
-  width: 100%;
-  color: white;
+.demo-toolbar {
+  padding: 6px;
+
+  .demo-toolbar-icon {
+    padding: 0 14px;
+  }
+
+  .demo-fill-remaining {
+    flex: 1 1 auto;
+  }
+
+}
+.fill-remaining-space {
+   /*This fills the remaining space, by using flexbox.
+  Every toolbar row uses a flexbox row layout. */
+  flex: 1 1 auto;
 }
 /*
  * Global add-ons
@@ -30,6 +41,13 @@ body {
   border: 0;
   background-color: #030300;
 }
+.title {
+  text-decoration: none;
+  color: white;
+  vertical-align: middle;
+  font-size: 17px;
+}
+
 
 /*
  * Sidebar

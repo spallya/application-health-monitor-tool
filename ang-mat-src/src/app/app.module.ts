@@ -11,6 +11,7 @@ import { MdIconRegistry } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '@angular/material';
+import { FlexLayoutModule } from "@angular/flex-layout";
 import 'hammerjs';
 
 import { AppComponent } from './app.component';
@@ -23,6 +24,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 
 import { ValidateService } from "./services/validate.service";
 import { AuthService } from "./services/auth.service";
+import { CommunicatorService } from "./services/communicator.service";
 
 import { AuthGuard } from "./guard/auth.guard";
 
@@ -63,13 +65,15 @@ const appRoutes: Routes = [
     MdCheckboxModule,
     MdCardModule,
     MdIconModule,
-    MaterialModule
+    MaterialModule,
+    FlexLayoutModule
   ],
   providers: [
     ValidateService,
     AuthService,
     AuthGuard,
-    MdIconRegistry
+    MdIconRegistry,
+    CommunicatorService
   ],
   bootstrap: [AppComponent]
 })

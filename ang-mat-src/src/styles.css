@@ -1,1 +1,14 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+}
+:root {
+  --color-cloud: #ecf0f1;
+}
+
+.fill-remaining-space {
+   /*This fills the remaining space, by using flexbox.
+  Every toolbar row uses a flexbox row layout. */
+  flex: 1 1 auto;
+}
