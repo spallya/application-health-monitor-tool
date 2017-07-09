@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  onLoginSubmit() {
+  onLoginSubmit(form) {
     const user = {
       email: this.email,
       password: this.password
@@ -38,9 +38,10 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/dashboard']);
       } else {
 
-        this.router.navigate(['/login']);
+        this.router.navigate(['/']);
       }
     });
+    // form.reset();
   }
 
 }

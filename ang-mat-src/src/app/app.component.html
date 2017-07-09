@@ -1,8 +1,10 @@
 <app-navbar></app-navbar>
 <div class="body-container" *ngIf="authService.loggedIn()">
   <div class="sidbar-container" >
-    <span class="menu-item" *ngFor="let menu of menuItems; let i = index" (click)="menuItemClick(i)" [ngClass]="menu.active?'menu-item menu-item-active':'menu-item'">{{menu.name}}</span>
-    <span class="menu-item">Item</span>
+    <span class="menu-item" *ngFor="let menu of menuItems; let i = index" (click)="menuItemClick(i)" [ngClass]="menu.active?'menu-item menu-item-active':'menu-item'">
+      <i class="{{menu.icon}}" aria-hidden="true" style="padding-right: 5px"></i>
+      {{menu.name}}
+    </span>
   </div>
   <div style="dispaly: flex; flex-direction: col; flex: 10; overflow-y: scroll;">
     <router-outlet></router-outlet>

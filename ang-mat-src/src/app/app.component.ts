@@ -25,18 +25,18 @@ export class AppComponent {
 
 const sidebarMenuItem = [
   {
-    name: "Dashboard", routerLink: "/dashboard", active: true
+    name: "Dashboard", routerLink: "/dashboard", active: true, icon: 'fa fa-tachometer'
   },
   {
-    name: "Profile", routerLink: "/profile", active: false
+    name: "User Profile", routerLink: "/profile", active: false, icon: 'fa fa-user'
   },
   {
-    name: "Servers", routerLink: "/dashboard", active: false
+    name: "Organizations", routerLink: "/organizations", active: false, icon: 'fa fa-sitemap'
   },
   {
-    name: "Users", routerLink: "/dashboard", active: false
+    name: "Servers", routerLink: "/servers", active: false, icon: 'fa fa-windows'
   },
   {
-    name: "Logout", routerLink: "/dashboard", active: false
+    name: "Users", routerLink: "/users", active: false, icon: 'fa fa-users'
   }
 ];
