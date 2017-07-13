@@ -1,5 +1,16 @@
 <div style="width: 100%; display: flex; flex-direction: column; padding: 10px">
   <div class="row">
+    <div class="col-md-11">
+      <h2 class="sub-header">Servers Status</h2>
+    </div>
+    <div class="col-md-1" style="position: absolute; right: 35px; top: 90px;">
+      <button md-button (click)="checkStatusOfAll()">
+        <i class="fa fa-refresh" style="font-size: 20px; cursor: pointer; padding-right: 5px;"  aria-hidden="true"></i>
+        <span style="font-size: 15px">Refresh All</span>
+    </button>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-md-3" *ngFor="let item of serverDetails; let i = index">
       <md-card style="margin: 10px; margin-right: -5px">
         <md-card-title-group>

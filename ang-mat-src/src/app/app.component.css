@@ -24,12 +24,16 @@
 }
 
 .menu-item:hover {
-  background-color: #4FC3F7;
+  background-color: #CFD8DC;
   cursor: pointer;
   color:#37474F;
 }
 
 .menu-item-active {
+background-color: #4FC3F7;
+  color: #37474F;
+}
+.menu-item-active:hover {
 background-color: #4FC3F7;
   color: #37474F;
 }

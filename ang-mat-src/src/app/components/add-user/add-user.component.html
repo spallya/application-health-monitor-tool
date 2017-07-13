@@ -1,19 +1,34 @@
-<button md-raised-button color="primary" (click)="smModal.show()">Login</button>
+<button md-raised-button color="primary" (click)="smModal.show()">Add User</button>
 
 <div bsModal #smModal="bs-modal" class="modal fade" style="font-size: 15px" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm" style="width: 30%">
+  <div class="modal-dialog modal-sm" style="width: 40%">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title pull-left" style="color: black">Login</h4>
+        <h4 class="modal-title pull-left" style="color: black">Add New User</h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="smModal.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form #loginForm="ngForm" (ngSubmit)="onLoginSubmit(loginForm)">
+        <form #addUserForm="ngForm" (ngSubmit)="onAddUserSubmit(addUserForm)">
+          <p>
+            <md-input-container style="width: 100%">
+              <input mdInput required type="text" [(ngModel)]="firstName" name="firstName" placeholder="First Name">
+            </md-input-container>
+          </p>
+          <p>
+            <md-input-container style="width: 100%">
+              <input mdInput required type="text" [(ngModel)]="lastName" name="lastName" placeholder="Last Name">
+            </md-input-container>
+          </p>
           <p>
             <md-input-container style="width: 100%">
               <input mdInput required type="text" [(ngModel)]="email" name="email" placeholder="Email">
+            </md-input-container>
+          </p>
+          <p>
+            <md-input-container style="width: 100%">
+              <input mdInput required type="text" [(ngModel)]="organization" name="organization" placeholder="Organization">
             </md-input-container>
           </p>
           <p>

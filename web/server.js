@@ -5,6 +5,7 @@ import cors from 'cors';
 import passport from 'passport';
 const usersRouter = require(`./routes/usersRouter`);
 const serversRouter = require(`./routes/serversRouter`);
+const organizationRouter = require(`./routes/organizationRouter`);
 // const { exec } = require('child_process');
 // const cron = require('node-cron');
 // let count = 1;
@@ -37,6 +38,8 @@ require(`../config/components/passport`)(passport);
 app.use(`/users`, usersRouter);
 
 app.use(`/servers`, serversRouter);
+
+app.use(`/organizations`, organizationRouter);
 
 app.get('/', (req, res) => {
     res.send(`Hello MEAN Stack!!!`);

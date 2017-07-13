@@ -1,0 +1,3 @@
+colection.update({_id:id},{$push:{array_name: valu}}, function(err,response){
+
+})

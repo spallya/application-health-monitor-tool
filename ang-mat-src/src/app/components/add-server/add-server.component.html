@@ -1,24 +1,29 @@
-<button md-raised-button color="primary" (click)="smModal.show()">Login</button>
+<button md-raised-button color="primary" (click)="smModal.show()">Add Server</button>
 
 <div bsModal #smModal="bs-modal" class="modal fade" style="font-size: 15px" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm" style="width: 30%">
+  <div class="modal-dialog modal-sm" style="width: 40%">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title pull-left" style="color: black">Login</h4>
+        <h4 class="modal-title pull-left" style="color: black">Add New Server</h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="smModal.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form #loginForm="ngForm" (ngSubmit)="onLoginSubmit(loginForm)">
+        <form #addServerForm="ngForm" (ngSubmit)="onAddServerSubmit(addServerForm)">
           <p>
             <md-input-container style="width: 100%">
-              <input mdInput required type="text" [(ngModel)]="email" name="email" placeholder="Email">
+              <input mdInput required type="text" [(ngModel)]="serverName" name="serverName" placeholder="Server Name">
             </md-input-container>
           </p>
           <p>
             <md-input-container style="width: 100%; color: black">
-              <input mdInput required type="password" [(ngModel)]="password" name="password"  placeholder="Password">
+              <input mdInput required type="text" [(ngModel)]="description" name="description"  placeholder="Description">
+            </md-input-container>
+          </p>
+          <p>
+            <md-input-container style="width: 100%; color: black">
+              <input mdInput required type="text" [(ngModel)]="url" name="url"  placeholder="URL">
             </md-input-container>
           </p>
           <p>

@@ -1,7 +1,9 @@
 <md-toolbar color="primary" style="background-color: #37474F;">
-    <a class="title" routerLink="/">
+    <a class="title" routerLink="/" style="font-size: 18px">
         Application Health Monitor</a>
-    <select *ngIf="authService.loggedIn()" style="color: #37474F; outline: none; width: 20%; margin-left: 20px" (change)="persistOrg($event.target.value)">
+    <select *ngIf="authService.loggedIn()"
+            style="color: #37474F; font-size: 18px; outline: none; width: 20%; margin-left: 20px"
+            (change)="persistOrg($event.target.value)">
       <option value="-1">Select an organization</option>
       <option value="0">Option1</option>
       <option value="2">Option2</option>
@@ -10,11 +12,11 @@
     <span class="fill-remaining-space"></span>
     <div fxLayout="row" fxShow="false" fxShow.gt-sm>
     </div>
+    <span *ngIf="authService.loggedIn()" style="font-size: 15px; padding-right: 75px">Welcome, {{user.firstName}}</span>
     <app-login *ngIf="!authService.loggedIn()"></app-login>
     <span style="position: absolute; right: 0;">
     <button md-button style="padding: 0px;" *ngIf="authService.loggedIn()" aria-hidden="true" (click)="onLogoutClick()" routerLink="/" style="cursor: pointer" tooltip="Click here to logout" placement="bottom">
       <i class="fa fa-sign-out" style="font-size: 21px"></i>
     </button>
   </span>
-
 </md-toolbar>

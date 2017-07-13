@@ -24,22 +24,24 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ServerComponent } from './components/server/server.component';
-
-import { ValidateService } from "./services/validate.service";
-import { AuthService } from "./services/auth.service";
-import { CommunicatorService } from "./services/communicator.service";
-
-import { AuthGuard } from "./guard/auth.guard";
 import { UsersComponent } from './components/users/users.component';
 import { OrganizationsComponent } from './components/organizations/organizations.component';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { AddServerComponent } from './components/add-server/add-server.component';
 import { AddOrganizationComponent } from './components/add-organization/add-organization.component';
 
+import { ValidateService } from "./services/validate.service";
+import { AuthService } from "./services/auth.service";
+import { ServerService } from "./services/server.service";
+import { OrganizationService } from "./services/organization.service";
+import { CommunicatorService } from "./services/communicator.service";
+
+import { AuthGuard } from "./guard/auth.guard";
+
 const appRoutes: Routes = [
   {path:'', component: HomeComponent},
+  {path:'register', component: RegisterComponent},
   {path:'servers', component: ServerComponent},
-  {path:'login', component: LoginComponent},
   {path:'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {path:'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   {path:'organizations', component: OrganizationsComponent, canActivate: [AuthGuard]},
@@ -85,6 +87,8 @@ const appRoutes: Routes = [
     AuthService,
     AuthGuard,
     MdIconRegistry,
+    ServerService,
+    OrganizationService,
     CommunicatorService
   ],
   bootstrap: [AppComponent]

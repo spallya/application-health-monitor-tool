@@ -6,7 +6,6 @@ import {
 } from '../../config';
 import { User as UserModel } from '../models';
 
-// Register
 router.post(`/register`, (req, res, next) => {
     let newUser = new UserModel({
         firstName:  req.body.firstName,
@@ -20,7 +19,6 @@ router.post(`/register`, (req, res, next) => {
     });
 });
 
-// Authenticate
 router.post(`/authenticate`, (req, res, next) => {
     let email = req.body.email;
     let password = req.body.password;
@@ -53,9 +51,14 @@ router.post(`/authenticate`, (req, res, next) => {
     });
 });
 
-// Profile
 router.get(`/profile`, passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    res.json({user: req.user});
+  let userProfile = {
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
+    email: req.user.email,
+    userId: req.user._id,
+  }
+  res.json({user: userProfile});
 });
 
 module.exports = router;

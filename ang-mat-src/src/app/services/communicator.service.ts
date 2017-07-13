@@ -6,11 +6,18 @@ export class CommunicatorService {
 
   constructor() { }
 
-  private currentOrgNameRequested = new Subject<String>();
-  currentOrgNameAnnounced = this.currentOrgNameRequested.asObservable();
+  private currentOrgIdRequested = new Subject<String>();
+  currentOrgIdAnnounced = this.currentOrgIdRequested.asObservable();
 
-  announceCurrentOrgName(orgName: String) {
-    this.currentOrgNameRequested.next(orgName);
+  private currentUserIdRequested = new Subject<String>();
+  currentUserIdAnnounced = this.currentUserIdRequested.asObservable();
 
+  announceCurrentOrgId(orgId: String) {
+    this.currentOrgIdRequested.next(orgId);
+  }
+
+  announceCurrentUserId(currentUserId: String) {
+    console.log(currentUserId);
+    this.currentUserIdRequested.next(currentUserId);
   }
 }

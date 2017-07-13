@@ -9,12 +9,12 @@ import { Subscription } from "rxjs/Subscription"
 })
 export class DashboardComponent implements OnInit {
 
-  imgSrc: String;
   serverDetails: ServerDetailsInterface[];
   currentOrgId: String;
   subscription : Subscription;
+  
   constructor(private communicatorService: CommunicatorService) {
-    this.subscription = communicatorService.currentOrgNameAnnounced.subscribe(orgId => {
+    this.subscription = communicatorService.currentOrgIdAnnounced.subscribe(orgId => {
       alert('from dashboard constructor' + orgId);
     });
   }
@@ -28,7 +28,9 @@ export class DashboardComponent implements OnInit {
   }
 
   checkStatusOfAll() {
-    // for()
+    for(let entry of this.serverDetails) {
+      entry.isActive = !entry.isActive;
+    }
   }
 
   ngOnDestroy() {

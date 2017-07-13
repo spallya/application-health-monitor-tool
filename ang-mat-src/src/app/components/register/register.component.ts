@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ValidateService } from "../../services/validate.service";
 import { AuthService } from "../../services/auth.service";
-
 import { Router } from "@angular/router";
 
 @Component({
@@ -20,7 +19,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private validateService: ValidateService,
     private authService: AuthService,
-    
+
     private router: Router
   ) { }
 
@@ -37,23 +36,22 @@ export class RegisterComponent implements OnInit {
     }
     console.log('Submit occured')
     // if(!this.validateService.validateRegister(user)) {
-    
+
     //   return false;
     // }
     //
     // if(!this.validateService.validateEmail(user.email)) {
-    
+
     //   return false;
     // }
 
     this.authService.registerUser(user).subscribe(data => {
-      console.log(data)
       if(data.success) {
-        
+
         console.log('Success register')
         this.router.navigate(['/login']);
       } else {
-        
+
         console.log('Fail register')
         this.router.navigate(['/register']);
       }
