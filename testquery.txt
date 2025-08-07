@@ -4,82 +4,151 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.Base64;
 
 public class GitHubCommitFetcher {
 
-    private static final String GITHUB_API = "https://api.github.com";
+    private static final String GITHUB_API = "https://githuhost/api/v3"; // GitHub Enterprise base URL
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String token;
+    private final String username;
+    private final String pat;
 
-    public GitHubCommitFetcher(String githubToken) {
-        this.token = githubToken;
+    public GitHubCommitFetcher(String username, String pat) {
+        this.username = username;
+        this.pat = pat;
     }
 
-    public void fetchUserCommits(String username, OffsetDateTime since, OffsetDateTime until) {
-        List<String> repos = fetchUserRepos(username);
-        for (String repo : repos) {
-            List<String> branches = fetchBranches(username, repo);
-            for (String branch : branches) {
-                List<Map<String, Object>> commits = fetchCommits(username, repo, branch, since, until);
-                for (Map<String, Object> commit : commits) {
-                    Map<String, Object> author = (Map<String, Object>) commit.get("author");
-                    if (author != null && username.equalsIgnoreCase((String) author.get("login"))) {
-                        System.out.println("Repo: " + repo + ", Branch: " + branch + ", Commit: " + commit.get("sha"));
-                    }
-                }
+    public void fetchAllCommits(OffsetDateTime since, OffsetDateTime until) {
+        List<String> allRepos = new ArrayList<>();
+
+        // Fetch personal repos
+        List<Map<String, String>> personalRepos = fetchUserRepos();
+        for (Map<String, String> repo : personalRepos) {
+            processRepoCommits(repo.get("owner"), repo.get("name"), since, until);
+        }
+
+        // Fetch org repos
+        List<String> orgs = fetchUserOrgs();
+        for (String org : orgs) {
+            List<Map<String, String>> orgRepos = fetchOrgRepos(org);
+            for (Map<String, String> repo : orgRepos) {
+                processRepoCommits(repo.get("owner"), repo.get("name"), since, until);
             }
         }
     }
 
-    private List<String> fetchUserRepos(String username) {
-        List<String> repoNames = new ArrayList<>();
+    private List<Map<String, String>> fetchUserRepos() {
+        List<Map<String, String>> repos = new ArrayList<>();
         int page = 1;
+
         while (true) {
-            String url = UriComponentsBuilder.fromHttpUrl(GITHUB_API + "/user/repos")
-                    .queryParam("type", "all")
+            String url = UriComponentsBuilder
+                    .fromHttpUrl(GITHUB_API + "/user/repos")
                     .queryParam("per_page", 100)
                     .queryParam("page", page)
                     .toUriString();
+
             ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), List.class);
-            List<Map<String, Object>> repos = response.getBody();
-            if (repos == null || repos.isEmpty()) break;
-            for (Map<String, Object> repo : repos) {
-                String ownerLogin = ((Map<String, Object>) repo.get("owner")).get("login").toString();
-                if (ownerLogin.equalsIgnoreCase(username)) {
-                    repoNames.add((String) repo.get("name"));
-                }
+            List<Map<String, Object>> repoList = response.getBody();
+            if (repoList == null || repoList.isEmpty()) break;
+
+            for (Map<String, Object> repo : repoList) {
+                Map<String, Object> owner = (Map<String, Object>) repo.get("owner");
+                Map<String, String> entry = new HashMap<>();
+                entry.put("name", (String) repo.get("name"));
+                entry.put("owner", (String) owner.get("login"));
+                repos.add(entry);
             }
+
             page++;
         }
-        return repoNames;
+
+        return repos;
     }
 
-    private List<String> fetchBranches(String username, String repo) {
-        String url = GITHUB_API + "/repos/" + username + "/" + repo + "/branches";
+    private List<String> fetchUserOrgs() {
+        String url = GITHUB_API + "/user/orgs";
         ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), List.class);
-        List<String> branchNames = new ArrayList<>();
+        List<String> orgs = new ArrayList<>();
+        for (Object obj : response.getBody()) {
+            Map<String, Object> org = (Map<String, Object>) obj;
+            orgs.add((String) org.get("login"));
+        }
+        return orgs;
+    }
+
+    private List<Map<String, String>> fetchOrgRepos(String org) {
+        List<Map<String, String>> repos = new ArrayList<>();
+        int page = 1;
+
+        while (true) {
+            String url = UriComponentsBuilder
+                    .fromHttpUrl(GITHUB_API + "/orgs/" + org + "/repos")
+                    .queryParam("per_page", 100)
+                    .queryParam("page", page)
+                    .toUriString();
+
+            ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), List.class);
+            List<Map<String, Object>> repoList = response.getBody();
+            if (repoList == null || repoList.isEmpty()) break;
+
+            for (Map<String, Object> repo : repoList) {
+                Map<String, Object> owner = (Map<String, Object>) repo.get("owner");
+                Map<String, String> entry = new HashMap<>();
+                entry.put("name", (String) repo.get("name"));
+                entry.put("owner", (String) owner.get("login"));
+                repos.add(entry);
+            }
+
+            page++;
+        }
+
+        return repos;
+    }
+
+    private void processRepoCommits(String owner, String repo, OffsetDateTime since, OffsetDateTime until) {
+        List<String> branches = fetchBranches(owner, repo);
+        for (String branch : branches) {
+            List<Map<String, Object>> commits = fetchCommits(owner, repo, branch, since, until);
+            for (Map<String, Object> commit : commits) {
+                Map<String, Object> author = (Map<String, Object>) commit.get("author");
+                if (author != null && username.equalsIgnoreCase((String) author.get("login"))) {
+                    System.out.println("[" + owner + "/" + repo + "@" + branch + "] → Commit: " + commit.get("sha"));
+                }
+            }
+        }
+    }
+
+    private List<String> fetchBranches(String owner, String repo) {
+        String url = GITHUB_API + "/repos/" + owner + "/" + repo + "/branches";
+        ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), List.class);
+        List<String> branches = new ArrayList<>();
         for (Object obj : response.getBody()) {
             Map<String, Object> branch = (Map<String, Object>) obj;
-            branchNames.add((String) branch.get("name"));
+            branches.add((String) branch.get("name"));
         }
-        return branchNames;
+        return branches;
     }
 
-    private List<Map<String, Object>> fetchCommits(String username, String repo, String branch, OffsetDateTime since, OffsetDateTime until) {
-        String url = UriComponentsBuilder.fromHttpUrl(GITHUB_API + "/repos/" + username + "/" + repo + "/commits")
+    private List<Map<String, Object>> fetchCommits(String owner, String repo, String branch, OffsetDateTime since, OffsetDateTime until) {
+        String url = UriComponentsBuilder.fromHttpUrl(GITHUB_API + "/repos/" + owner + "/" + repo + "/commits")
                 .queryParam("sha", branch)
-                .queryParam("since", since)
-                .queryParam("until", until)
+                .queryParam("since", since.toString())
+                .queryParam("until", until.toString())
+                .queryParam("author", username)
+                .queryParam("per_page", 100)
                 .toUriString();
 
         ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), List.class);
-        return (List<Map<String, Object>>) (response.getBody() == null ? List.of() : response.getBody());
+        return response.getBody() != null ? response.getBody() : List.of();
     }
 
     private HttpEntity<String> getHttpEntity() {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        String auth = username + ":" + pat;
+        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
+        headers.set("Authorization", "Basic " + encodedAuth);
         return new HttpEntity<>(headers);
     }
 }
