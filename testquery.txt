@@ -119,16 +119,33 @@ public class GitHubCommitFetcher {
         }
     }
 
-    private List<String> fetchBranches(String owner, String repo) {
-        String url = GITHUB_API + "/repos/" + owner + "/" + repo + "/branches";
+   private List<String> fetchBranches(String owner, String repo) {
+    List<String> branches = new ArrayList<>();
+    int page = 1;
+
+    while (true) {
+        String url = UriComponentsBuilder
+                .fromHttpUrl(GITHUB_API + "/repos/" + owner + "/" + repo + "/branches")
+                .queryParam("per_page", 100)
+                .queryParam("page", page)
+                .toUriString();
+
         ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, getHttpEntity(), List.class);
-        List<String> branches = new ArrayList<>();
-        for (Object obj : response.getBody()) {
-            Map<String, Object> branch = (Map<String, Object>) obj;
+        List<Map<String, Object>> branchList = response.getBody();
+
+        if (branchList == null || branchList.isEmpty()) {
+            break;
+        }
+
+        for (Map<String, Object> branch : branchList) {
             branches.add((String) branch.get("name"));
         }
-        return branches;
+
+        page++;
     }
+
+    return branches;
+}
 
     private List<Map<String, Object>> fetchCommits(String owner, String repo, String branch, OffsetDateTime since, OffsetDateTime until) {
         String url = UriComponentsBuilder.fromHttpUrl(GITHUB_API + "/repos/" + owner + "/" + repo + "/commits")
